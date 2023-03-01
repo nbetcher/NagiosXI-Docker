@@ -4,8 +4,8 @@ MAINTAINER cbpeckles
 # get stuff from the interwebs
 RUN yum -y install wget tar; yum clean all
 RUN mkdir /tmp/nagiosxi \
-    && wget -qO- https://assets.nagios.com/downloads/nagiosxi/5/xi-5.9.3.tar.gz \
-    | tar xz -C /tmp
+    && wget -vqO- https://assets.nagios.com/downloads/nagiosxi/5/xi-5.9.3.tar.gz \
+    | tar vxz -C /tmp
 WORKDIR /tmp/nagiosxi
 
 # overwrite custom config file
