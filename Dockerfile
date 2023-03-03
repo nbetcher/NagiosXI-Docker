@@ -37,14 +37,14 @@ RUN . ./functions.sh \
     && run_sub ./1-prereqs
 RUN . ./functions.sh \
     && run_sub ./2-usersgroups
-RUN . ./functions.sh \
+RUN --security=insecure . ./functions.sh \
     && run_sub ./3-dbservers
-RUN . ./functions.sh \
+RUN --security=insecure . ./functions.sh \
     && run_sub ./4-services
-RUN . ./functions.sh \
+RUN --security=insecure . ./functions.sh \
     && run_sub ./5-sudoers
 RUN sed -i.bak s/selinux/sudoers/g 9-dbbackups
-RUN . ./functions.sh \
+RUN --security=insecure . ./functions.sh \
     && run_sub ./9-dbbackups
 RUN . ./functions.sh \
     && run_sub ./11-sourceguardian
@@ -59,17 +59,17 @@ RUN chmod 755 subcomponents/ndoutils/post-install \
 	&& run_sub ./A-subcomponents \
 	&& run_sub ./A0-mrtg
 
-RUN service mysqld start \
+RUN --security=insecure service mysqld start \
     && . ./functions.sh \
 	&& run_sub ./B-installxi
 RUN . ./functions.sh \
     && run_sub ./C-cronjobs
 RUN . ./functions.sh \
     && run_sub ./D-chkconfigalldaemons
-RUN service mysqld start \
+RUN --security=insecure service mysqld start \
     && . ./functions.sh \
 	&& run_sub ./E-importnagiosql
-RUN . ./functions.sh \
+RUN --security=insecure . ./functions.sh \
     && run_sub ./F-startdaemons
 RUN . ./functions.sh \
     && run_sub ./Z-webroot
