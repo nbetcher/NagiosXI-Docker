@@ -15,14 +15,7 @@ RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
 VOLUME [ "/sys/fs/cgroup" ]
 
 # get stuff from the interwebs
-RUN yum -y install wget which; yum clean all
-
-RUN echo "SystemCTL: "; ls -l `which systemctl`;
-ADD scripts/systemctl /bin/systemctl
-RUN chmod 755 /bin/systemctl
-RUN echo "JournalCTL: "; ls -l `which journalctl`;
-ADD scripts/journalctl /bin/journalctl
-RUN chmod 755 /bin/journalctl
+RUN yum -y install wget python3; yum clean all
 
 RUN mkdir /tmp/nagiosxi \
     && wget -qO- https://assets.nagios.com/downloads/nagiosxi/5/xi-5.9.3.tar.gz \
@@ -39,7 +32,18 @@ RUN ./init.sh \
 	&& . ./functions.sh \
 	&& log="install.log"
 RUN export INTERACTIVE="False" \
-    && export INSTALL_PATH=`pwd`
+    && export INSTALL_PATH=`pwd`;
+
+# Replace systemd stuff with Docker-friendly 'fake' python3 derivitive from:
+#   https://github.com/gdraheim/docker-systemctl-replacement
+RUN echo "Replacing systemctl with slimmed-down Docker-friendly derivitive."
+ADD scripts/systemctl /usr/sbin/systemctl
+RUN chmod 755 /usr/sbin/systemctl
+RUN echo "Replacing journalctl with slimmed-down Docker-friendly derivitive."
+ADD scripts/journalctl /usr/sbin/journalctl
+RUN chmod 755 /usr/sbin/journalctl
+
+
 RUN . ./functions.sh \
     && run_sub ./0-repos noupdate
 RUN . ./functions.sh \
