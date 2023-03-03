@@ -15,7 +15,7 @@ RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
 VOLUME [ "/sys/fs/cgroup" ]
 
 # get stuff from the interwebs
-RUN yum -y install wget tar; yum clean all
+RUN yum -y install wget which; yum clean all
 
 RUN echo "SystemCTL: "; ls -l `which systemctl`;
 ADD scripts/systemctl /bin/systemctl
