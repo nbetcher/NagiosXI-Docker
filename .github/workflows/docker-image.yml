@@ -43,11 +43,10 @@ jobs:
     - name: Build and push Docker image
       uses: docker/build-push-action@v4
       with:
-       #builder: ${{ steps.buildx.outputs.name }}
+       builder: ${{ steps.buildx.outputs.name }}
        context: .
        push: true
        file: Dockerfile
        platforms: linux/amd64
-       tags: ${{ steps.meta.outputs.tags }}
+       tags: nbetcher/nagiusxi:latest
        labels: ${{ steps.meta.outputs.labels }}
-       options: --privileged
