@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1-labs
 FROM centos:7
 MAINTAINER cbpeckles
 ENV container docker
