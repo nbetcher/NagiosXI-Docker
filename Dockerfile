@@ -33,7 +33,12 @@ RUN ./init.sh \
 	&& log="install.log"
 RUN export INTERACTIVE="False" \
     && export INSTALL_PATH=`pwd`;
-
+RUN . ./functions.sh \
+    && run_sub ./0-repos noupdate
+RUN . ./functions.sh \
+    && run_sub ./1-prereqs
+    
+    
 # Replace systemd stuff with Docker-friendly 'fake' python3 derivitive from:
 #   https://github.com/gdraheim/docker-systemctl-replacement
 RUN echo "Replacing systemctl with slimmed-down Docker-friendly derivitive."
@@ -44,10 +49,6 @@ ADD scripts/journalctl /usr/sbin/journalctl
 RUN chmod 755 /usr/sbin/journalctl
 
 
-RUN . ./functions.sh \
-    && run_sub ./0-repos noupdate
-RUN . ./functions.sh \
-    && run_sub ./1-prereqs
 RUN . ./functions.sh \
     && run_sub ./2-usersgroups
 RUN --security=insecure . ./functions.sh \
