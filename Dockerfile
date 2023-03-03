@@ -14,6 +14,9 @@ RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
     rm -f /lib/systemd/system/anaconda.target.wants/*;
 VOLUME [ "/sys/fs/cgroup" ]
 
+# get stuff from the interwebs
+RUN yum -y install wget tar; yum clean all
+
 RUN echo "SystemCTL: "; ls -l `which systemctl`;
 ADD scripts/systemctl /bin/systemctl
 RUN chmod 755 /bin/systemctl
@@ -21,8 +24,6 @@ RUN echo "JournalCTL: "; ls -l `which journalctl`;
 ADD scripts/journalctl /bin/journalctl
 RUN chmod 755 /bin/journalctl
 
-# get stuff from the interwebs
-RUN yum -y install wget tar; yum clean all
 RUN mkdir /tmp/nagiosxi \
     && wget -qO- https://assets.nagios.com/downloads/nagiosxi/5/xi-5.9.3.tar.gz \
     | tar xz -C /tmp
