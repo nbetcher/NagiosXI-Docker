@@ -14,6 +14,9 @@ RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
     rm -f /lib/systemd/system/anaconda.target.wants/*;
 VOLUME [ "/sys/fs/cgroup" ]
 
+RUN echo -e "Information about systemctl:\n"; echo "ls -l "`which systemctl`":"; ls -l `which systemctl`; echo "ls -l /usr/sbin/systemctl:"; ls -l /usr/sbin/systemctl; echo -e "\n";
+RUN echo -e "Information about journalctl:\n"; echo "ls -l "`which journalctl`":"; ls -l `which journalctl`; echo "ls -l /usr/sbin/journalctl:"; ls -l /usr/sbin/journalctl;
+
 # get stuff from the interwebs
 RUN yum -y install wget python3; yum clean all
 
