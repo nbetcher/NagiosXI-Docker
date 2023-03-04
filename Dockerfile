@@ -14,11 +14,11 @@ RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
     rm -f /lib/systemd/system/anaconda.target.wants/*;
 VOLUME [ "/sys/fs/cgroup" ]
 
+# get stuff from the interwebs
+RUN yum -y install wget python3 which; yum clean all
+
 RUN echo -e "Information about systemctl:\n"; echo "ls -l "`which systemctl`":"; ls -l `which systemctl`; echo "ls -l /usr/sbin/systemctl:"; ls -l /usr/sbin/systemctl; echo -e "\n";
 RUN echo -e "Information about journalctl:\n"; echo "ls -l "`which journalctl`":"; ls -l `which journalctl`; echo "ls -l /usr/sbin/journalctl:"; ls -l /usr/sbin/journalctl;
-
-# get stuff from the interwebs
-RUN yum -y install wget python3; yum clean all
 
 RUN mkdir /tmp/nagiosxi \
     && wget -qO- https://assets.nagios.com/downloads/nagiosxi/5/xi-5.9.3.tar.gz \
