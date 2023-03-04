@@ -15,10 +15,12 @@ RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
 VOLUME [ "/sys/fs/cgroup" ]
 
 # get stuff from the interwebs
-RUN yum -y install wget python3 which; yum clean all
+RUN yum -y install wget python3; yum clean all
 
-RUN echo -e "Information about systemctl:\n"; echo "ls -l "`which systemctl`":"; ls -l `which systemctl`; echo "ls -l /usr/sbin/systemctl:"; ls -l /usr/sbin/systemctl; echo -e "\n";
-RUN echo -e "Information about journalctl:\n"; echo "ls -l "`which journalctl`":"; ls -l `which journalctl`; echo "ls -l /usr/sbin/journalctl:"; ls -l /usr/sbin/journalctl;
+# Debugging for paths for systemd userspace tooling:
+#
+# RUN echo -e "Information about systemctl:\n"; echo "ls -l "`which systemctl`":"; ls -l `which systemctl`; echo -e "\n";
+# RUN echo -e "Information about journalctl:\n"; echo "ls -l "`which journalctl`":"; ls -l `which journalctl`;
 
 RUN mkdir /tmp/nagiosxi \
     && wget -qO- https://assets.nagios.com/downloads/nagiosxi/5/xi-5.9.3.tar.gz \
@@ -45,11 +47,11 @@ RUN . ./functions.sh \
 # Replace systemd stuff with Docker-friendly 'fake' python3 derivitive from:
 #   https://github.com/gdraheim/docker-systemctl-replacement
 RUN echo "Replacing systemctl with slimmed-down Docker-friendly derivitive."
-ADD scripts/systemctl /usr/sbin/systemctl
-RUN chmod 755 /usr/sbin/systemctl
+ADD scripts/systemctl /usr/bin/systemctl
+RUN chmod 755 /usr/bin/systemctl
 RUN echo "Replacing journalctl with slimmed-down Docker-friendly derivitive."
-ADD scripts/journalctl /usr/sbin/journalctl
-RUN chmod 755 /usr/sbin/journalctl
+ADD scripts/journalctl /usr/bin/journalctl
+RUN chmod 755 /usr/bin/journalctl
 
 
 RUN . ./functions.sh \
