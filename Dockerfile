@@ -15,7 +15,7 @@ RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
 VOLUME [ "/sys/fs/cgroup" ]
 
 # get stuff from the interwebs
-RUN yum -y install wget python3; yum clean all
+RUN yum -y install wget python3 which; yum clean all
 
 # Debugging for paths for systemd userspace tooling:
 #
