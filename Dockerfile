@@ -56,14 +56,14 @@ RUN chmod 755 /usr/bin/journalctl
 
 RUN . ./functions.sh \
     && run_sub ./2-usersgroups
-RUN --security=insecure . ./functions.sh \
+RUN . ./functions.sh \
     && run_sub ./3-dbservers
-RUN --security=insecure . ./functions.sh \
+RUN . ./functions.sh \
     && run_sub ./4-services
-RUN --security=insecure . ./functions.sh \
+RUN . ./functions.sh \
     && run_sub ./5-sudoers
 RUN sed -i.bak s/selinux/sudoers/g 9-dbbackups
-RUN --security=insecure . ./functions.sh \
+RUN . ./functions.sh \
     && run_sub ./9-dbbackups
 RUN . ./functions.sh \
     && run_sub ./11-sourceguardian
@@ -72,23 +72,25 @@ RUN . ./functions.sh \
 
 ADD scripts/NDOUTILS-POST subcomponents/ndoutils/post-install
 ADD scripts/install subcomponents/ndoutils/install
-RUN chmod 755 subcomponents/ndoutils/post-install \
+RUN (chmod 755 subcomponents/ndoutils/post-install \
     && chmod 755 subcomponents/ndoutils/install \
 	&& . ./functions.sh \
 	&& run_sub ./A-subcomponents \
-	&& run_sub ./A0-mrtg
+	&& run_sub ./A0-mrtg); exit 0;
 
-RUN --security=insecure service mysqld start \
+RUN echo "Outputting logs:"; cat /var/log/messages; cat /var/log/syslog; cat /var/log/mysql.log; ls -l /var/log/; exit 1;
+
+RUN service mysqld start \
     && . ./functions.sh \
 	&& run_sub ./B-installxi
 RUN . ./functions.sh \
     && run_sub ./C-cronjobs
 RUN . ./functions.sh \
     && run_sub ./D-chkconfigalldaemons
-RUN --security=insecure service mysqld start \
+RUN service mysqld start \
     && . ./functions.sh \
 	&& run_sub ./E-importnagiosql
-RUN --security=insecure . ./functions.sh \
+RUN . ./functions.sh \
     && run_sub ./F-startdaemons
 RUN . ./functions.sh \
     && run_sub ./Z-webroot
