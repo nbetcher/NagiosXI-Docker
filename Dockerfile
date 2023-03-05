@@ -75,8 +75,7 @@ ADD scripts/install subcomponents/ndoutils/install
 RUN (chmod 755 subcomponents/ndoutils/post-install \
     && chmod 755 subcomponents/ndoutils/install \
 	&& . ./functions.sh; \
-	{ systemctl stop mariadb.service; systemctl start mariadb.service }; \
-        \
+        { systemctl stop mariadb.service; systemctl start mariadb.service }; \
 	&& run_sub ./A-subcomponents \
 	&& run_sub ./A0-mrtg); exit 0;
 
