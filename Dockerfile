@@ -78,7 +78,7 @@ RUN (chmod 755 subcomponents/ndoutils/post-install \
 	&& run_sub ./A-subcomponents \
 	&& run_sub ./A0-mrtg); exit 0;
 
-RUN echo "Outputting logs:"; journalctl -x -u mariadb; echo "/var/lib/mysql/mysql.sock :"; ls -l /var/lib/mysql/; exit 1;
+RUN echo "Outputting logs:"; journalctl -x -u mariadb; echo "Running processes:"; ps aux; exit 1;
 
 RUN service mysqld start \
     && . ./functions.sh \
