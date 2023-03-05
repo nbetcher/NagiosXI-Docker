@@ -78,7 +78,7 @@ RUN (chmod 755 subcomponents/ndoutils/post-install \
 	&& run_sub ./A-subcomponents \
 	&& run_sub ./A0-mrtg); exit 0;
 
-RUN echo "Outputting logs:"; journalctl -xe; cat /var/log/mariadb/*; exit 1;
+RUN echo "Outputting logs:"; journalctl -x; exit 1;
 
 RUN service mysqld start \
     && . ./functions.sh \
