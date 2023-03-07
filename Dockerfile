@@ -34,6 +34,9 @@ RUN mkdir /tmp/nagiosxi \
     | tar xz -C /tmp
 WORKDIR /tmp/nagiosxi
 
+RUN ls -l /tmp/
+RUN ls -l /tmp/nagiosxi/
+
 # overwrite custom config file
 ADD config.cfg xi-sys.cfg
 
