@@ -76,21 +76,21 @@ ADD scripts/install subcomponents/ndoutils/install
 # Install fake ps so system is identified as system
 #
 # Backup existing 'ps' first for later.
-# RUN mv /bin/ps /bin/ps.orig
+RUN mv /bin/ps /bin/ps.orig
 
 # Install fake ps:
-# ADD scripts/ps /bin/ps
-# RUN chmod 755 /bin/ps
+ADD scripts/ps /bin/ps
+RUN chmod 755 /bin/ps
 
-RUN (systemctl start mariadb.service \
-     && chmod 755 subcomponents/ndoutils/post-install \
-     && chmod 755 subcomponents/ndoutils/install \
-        && . ./functions.sh; \
-        && run_sub ./A-subcomponents \
-        && run_sub ./A0-mrtg); exit 0;
+RUN systemctl start mariadb.service \
+    && chmod 755 subcomponents/ndoutils/post-install \
+    && chmod 755 subcomponents/ndoutils/install \
+       && . ./functions.sh \
+       && run_sub ./A-subcomponents \
+       && run_sub ./A0-mrtg
 	
 # Restore existing ps:
-# RUN mv /bin/ps.orig /bin/ps
+RUN mv /bin/ps.orig /bin/ps
 
 RUN systemctl start mariadb.service \
     && . ./functions.sh \
