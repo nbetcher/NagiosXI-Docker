@@ -82,12 +82,12 @@ RUN mv /bin/ps /bin/ps.orig
 ADD scripts/ps /bin/ps
 RUN chmod 755 /bin/ps
 
-RUN systemctl start mariadb.service \
-    && (chmod 755 subcomponents/ndoutils/post-install \
-    &&  chmod 755 subcomponents/ndoutils/install \
-	&& . ./functions.sh; \
-	&& run_sub ./A-subcomponents \
-	&& run_sub ./A0-mrtg); exit 0;
+RUN (systemctl start mariadb.service \
+     && chmod 755 subcomponents/ndoutils/post-install \
+     && chmod 755 subcomponents/ndoutils/install \
+        && . ./functions.sh; \
+        && run_sub ./A-subcomponents \
+        && run_sub ./A0-mrtg); exit 0;
 	
 # Restore existing ps:
 RUN mv /bin/ps.orig /bin/ps
