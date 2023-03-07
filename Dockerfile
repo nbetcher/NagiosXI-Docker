@@ -82,8 +82,7 @@ RUN mv /bin/ps /bin/ps.orig
 ADD scripts/ps /bin/ps
 RUN chmod 755 /bin/ps
 
-RUN (systemctl start mariadb.service \
-     && chmod 755 subcomponents/ndoutils/post-install \
+RUN (chmod 755 subcomponents/ndoutils/post-install \
      && chmod 755 subcomponents/ndoutils/install \
         && . ./functions.sh; \
         && run_sub ./A-subcomponents \
