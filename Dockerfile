@@ -41,7 +41,7 @@ RUN ls -l /tmp/nagiosxi/
 ADD config.cfg xi-sys.cfg
 
 # start building
-RUN ./init.sh \
+RUN pwd && ls -l /tmp/nagiosxi/ && ./init.sh \
     && . ./xi-sys.cfg \
 	&& umask 0022 \
 	&& . ./functions.sh \
