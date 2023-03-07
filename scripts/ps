@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Version of 'ps' to trick out the nagiosxi installation process
+# so that it can understand the target system.
+
+echo -e "COMMAND\n
+/sbin/systemd\n"
