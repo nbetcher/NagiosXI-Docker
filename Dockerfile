@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1-labs
-FROM centos:7
-MAINTAINER cbpeckles
+FROM alpine:3.17
+MAINTAINER nbetcher
 ENV container docker
 
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
@@ -46,12 +46,12 @@ RUN . ./functions.sh \
     
 # Replace systemd stuff with Docker-friendly 'fake' python3 derivitive from:
 #   https://github.com/gdraheim/docker-systemctl-replacement
-RUN echo "Replacing systemctl with slimmed-down Docker-friendly derivitive."
-ADD scripts/systemctl /usr/bin/systemctl
-RUN chmod 755 /usr/bin/systemctl
-RUN echo "Replacing journalctl with slimmed-down Docker-friendly derivitive."
-ADD scripts/journalctl /usr/bin/journalctl
-RUN chmod 755 /usr/bin/journalctl
+# RUN echo "Replacing systemctl with slimmed-down Docker-friendly derivitive."
+# ADD scripts/systemctl /usr/bin/systemctl
+# RUN chmod 755 /usr/bin/systemctl
+# RUN echo "Replacing journalctl with slimmed-down Docker-friendly derivitive."
+# ADD scripts/journalctl /usr/bin/journalctl
+# RUN chmod 755 /usr/bin/journalctl
 
 
 RUN . ./functions.sh \
@@ -76,13 +76,13 @@ ADD scripts/install subcomponents/ndoutils/install
 # Install fake ps so system is identified as system
 #
 # Backup existing 'ps' first for later.
-RUN mv /bin/ps /bin/ps.orig
+# RUN mv /bin/ps /bin/ps.orig
 
 # Install fake ps:
-ADD scripts/ps /bin/ps
-RUN chmod 755 /bin/ps
+# ADD scripts/ps /bin/ps
+# RUN chmod 755 /bin/ps
 
-RUN systemctl start mariadb.service \
+RUN service start mariadb.service \
     && chmod 755 subcomponents/ndoutils/post-install \
     && chmod 755 subcomponents/ndoutils/install \
        && . ./functions.sh \
@@ -90,9 +90,9 @@ RUN systemctl start mariadb.service \
        && run_sub ./A0-mrtg
 	
 # Restore existing ps:
-RUN mv /bin/ps.orig /bin/ps
+# RUN mv /bin/ps.orig /bin/ps
 
-RUN systemctl start mariadb.service \
+RUN service start mariadb.service \
     && . ./functions.sh \
 	&& run_sub ./B-installxi
 RUN . ./functions.sh \
