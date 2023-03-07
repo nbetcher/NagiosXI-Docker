@@ -22,7 +22,7 @@ RUN apk add --update-cache \
     python3-dev \
     py3-pip \
     build-base \
-    bash
+    bash \
   && rm -rf /var/cache/apk/*
 
 # Debugging for paths for systemd userspace tooling:
