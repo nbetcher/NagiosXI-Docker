@@ -1,41 +1,33 @@
 # syntax=docker/dockerfile:1-labs
-FROM alpine:3.17
+FROM centos:7
 MAINTAINER nbetcher
 ENV container docker
 
-# RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
-#     systemd-tmpfiles-setup.service ] || rm -f $i; done); \
-#     rm -f /lib/systemd/system/multi-user.target.wants/*; \
-#     rm -f /etc/systemd/system/*.wants/*; \
-#     rm -f /lib/systemd/system/local-fs.target.wants/*; \
-#     rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
-#     rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
-#     rm -f /lib/systemd/system/basic.target.wants/*; \
-#     rm -f /lib/systemd/system/anaconda.target.wants/*;
-# VOLUME [ "/sys/fs/cgroup" ]
+RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
+    systemd-tmpfiles-setup.service ] || rm -f $i; done); \
+    rm -f /lib/systemd/system/multi-user.target.wants/*; \
+    rm -f /etc/systemd/system/*.wants/*; \
+    rm -f /lib/systemd/system/local-fs.target.wants/*; \
+    rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
+    rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
+    rm -f /lib/systemd/system/basic.target.wants/*; \
+    rm -f /lib/systemd/system/anaconda.target.wants/*;
 
 # get stuff from the interwebs
-# RUN yum -y install wget python3 which; yum clean all
-
-RUN apk add --update-cache \
-    python3 \
-    python3-dev \
-    py3-pip \
-    build-base \
-    bash \
-  && rm -rf /var/cache/apk/*
-
-# Debugging for paths for systemd userspace tooling:
-#
-# RUN echo -e "Information about systemctl:\n"; echo "ls -l "`which systemctl`":"; ls -l `which systemctl`; echo -e "\n";
-# RUN echo -e "Information about journalctl:\n"; echo "ls -l "`which journalctl`":"; ls -l `which journalctl`;
+RUN yum -y install wget python3 which; yum clean all
 
 RUN mkdir /tmp/nagiosxi \
     && wget -qO- https://assets.nagios.com/downloads/nagiosxi/5/xi-5.9.3.tar.gz \
     | tar xz -C /tmp
+
+# Patch nrpe install to specify system init type as SystemD
+WORKDIR /tmp
+ADD scripts/nrpe-install-systemd.patch
+RUN patch < nrpe-install-systemd.patch
+RUN cat /tmp/nagiosxi/subcomponents/nrpe/install; exit 1
+
 WORKDIR /tmp/nagiosxi
 
-RUN ls -l /tmp/
 RUN ls -l /tmp/nagiosxi/
 
 # overwrite custom config file
@@ -57,12 +49,12 @@ RUN . ./functions.sh \
     
 # Replace systemd stuff with Docker-friendly 'fake' python3 derivitive from:
 #   https://github.com/gdraheim/docker-systemctl-replacement
-# RUN echo "Replacing systemctl with slimmed-down Docker-friendly derivitive."
-# ADD scripts/systemctl /usr/bin/systemctl
-# RUN chmod 755 /usr/bin/systemctl
-# RUN echo "Replacing journalctl with slimmed-down Docker-friendly derivitive."
-# ADD scripts/journalctl /usr/bin/journalctl
-# RUN chmod 755 /usr/bin/journalctl
+RUN echo "Replacing systemctl with slimmed-down Docker-friendly derivitive."
+ADD scripts/systemctl /usr/bin/systemctl
+RUN chmod 755 /usr/bin/systemctl
+RUN echo "Replacing journalctl with slimmed-down Docker-friendly derivitive."
+ADD scripts/journalctl /usr/bin/journalctl
+RUN chmod 755 /usr/bin/journalctl
 
 
 RUN . ./functions.sh \
@@ -96,9 +88,9 @@ ADD scripts/install subcomponents/ndoutils/install
 RUN service start mariadb.service \
     && chmod 755 subcomponents/ndoutils/post-install \
     && chmod 755 subcomponents/ndoutils/install \
-       && . ./functions.sh \
-       && run_sub ./A-subcomponents \
-       && run_sub ./A0-mrtg
+    && . ./functions.sh \
+    && run_sub ./A-subcomponents \
+    && run_sub ./A0-mrtg
 	
 # Restore existing ps:
 # RUN mv /bin/ps.orig /bin/ps
