@@ -89,7 +89,7 @@ RUN . ./functions.sh \
 
 RUN systemctl start mariadb.service \
     && . ./functions.sh \
-    && run_sub ./A-subcomponents \
+    && { run_sub ./A-subcomponents; echo /tmp/nagiosxi/subcomponents/nsca/nsca-2.10.2/install.log; systemctl daemon-reload; systemctl start nsca; systemctl start nsca.service; } \
     && run_sub ./A0-mrtg
 	
 # Restore existing ps:
