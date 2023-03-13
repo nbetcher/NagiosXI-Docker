@@ -22,6 +22,9 @@ RUN mkdir /tmp/nagiosxi \
 
 # Patch nrpe install to specify system init type as SystemD
 WORKDIR /tmp
+RUN ls -l /tmp
+RUN ls -l /tmp/nagiosxi
+RUN ls -l /tmp/nagiosxi/subcomponents/nrpe
 ADD scripts/nrpe-install-systemd.patch /tmp/nrpe-install-systemd.patch
 RUN patch < nrpe-install-systemd.patch
 RUN cat /tmp/nagiosxi/subcomponents/nrpe/install; exit 1
