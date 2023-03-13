@@ -29,7 +29,7 @@ RUN patch < nrpe-install-systemd.patch
 # From old Dockerfile for CentOS: ADD scripts/NDOUTILS-POST subcomponents/ndoutils/post-install
 ADD scripts/ndoutils-install-systemd.patch subcomponents/ndo/ndoutils-install-systemd.patch
 WORKDIR /tmp/nagiosxi/subcomponents/ndo
-RUN patch < nrpe-install-systemd.patch
+RUN patch < ndoutils-install-systemd.patch
 
 WORKDIR /tmp/nagiosxi
 
