@@ -25,7 +25,11 @@ RUN mkdir /tmp/nagiosxi \
 ADD scripts/nrpe-install-systemd.patch /tmp/nagiosxi/subcomponents/nrpe/nrpe-install-systemd.patch
 WORKDIR /tmp/nagiosxi/subcomponents/nrpe
 RUN patch < nrpe-install-systemd.patch
-RUN cat install
+
+# From old Dockerfile for CentOS: ADD scripts/NDOUTILS-POST subcomponents/ndoutils/post-install
+ADD scripts/ndoutils-install-systemd.patch subcomponents/ndo/ndoutils-install-systemd.patch
+WORKDIR /tmp/nagiosxi/subcomponents/ndo
+RUN patch < nrpe-install-systemd.patch
 
 WORKDIR /tmp/nagiosxi
 
@@ -73,9 +77,6 @@ RUN . ./functions.sh \
     && run_sub ./11-sourceguardian
 RUN . ./functions.sh \
     && run_sub ./13-phpini
-
-ADD scripts/NDOUTILS-POST subcomponents/ndoutils/post-install
-ADD scripts/install subcomponents/ndoutils/install
 
 # Install fake ps so system is identified as system
 #
