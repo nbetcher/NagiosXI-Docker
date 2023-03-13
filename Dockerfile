@@ -86,7 +86,7 @@ ADD scripts/install subcomponents/ndoutils/install
 # ADD scripts/ps /bin/ps
 # RUN chmod 755 /bin/ps
 
-RUN service start mariadb.service \
+RUN systemctl start mariadb.service \
     && chmod 755 subcomponents/ndoutils/post-install \
     && chmod 755 subcomponents/ndoutils/install \
     && . ./functions.sh \
@@ -96,14 +96,14 @@ RUN service start mariadb.service \
 # Restore existing ps:
 # RUN mv /bin/ps.orig /bin/ps
 
-RUN service start mariadb.service \
+RUN systemctl start mariadb.service \
     && . ./functions.sh \
 	&& run_sub ./B-installxi
 RUN . ./functions.sh \
     && run_sub ./C-cronjobs
 RUN . ./functions.sh \
     && run_sub ./D-chkconfigalldaemons
-RUN service start mariadb.service \
+RUN systemctl start mariadb.service \
     && . ./functions.sh \
 	&& run_sub ./E-importnagiosql
 RUN . ./functions.sh \
