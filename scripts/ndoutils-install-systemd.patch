@@ -1,0 +1,11 @@
+--- install.old	2023-03-13 02:18:27.586998372 -0700
++++ install	2023-03-13 02:19:07.086982491 -0700
+@@ -16,7 +16,7 @@
+ (
+ 	cd "./$pkgname"
+ 
+-	./configure
++	./configure --with-init-type=systemd
+ 	make all
+ 	make install
+ 	make install-broker-line
