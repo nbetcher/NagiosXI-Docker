@@ -1,5 +1,5 @@
---- ./nagiosxi/subcomponents/nrpe/install.old	2023-01-31 18:30:16.000000000 -0700
-+++ ./nagiosxi/subcomponents/nrpe/install	2023-03-12 22:55:09.122284157 -0700
+--- install.old	2023-01-31 18:30:16.000000000 -0700
++++ install	2023-03-12 22:55:09.122284157 -0700
 @@ -20,7 +20,7 @@
  	elif [ "$distro" == "Raspbian" ]; then
  		./configure --with-ssl-lib=/usr/lib/arm-linux-gnueabihf --libexecdir=/usr/local/nagios/libexec --enable-command-args
