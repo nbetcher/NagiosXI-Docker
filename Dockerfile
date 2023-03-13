@@ -25,7 +25,7 @@ RUN mkdir /tmp/nagiosxi \
 ADD scripts/nrpe-install-systemd.patch /tmp/nagiosxi/subcomponents/nrpe/nrpe-install-systemd.patch
 WORKDIR /tmp/nagiosxi/subcomponents/nrpe
 RUN patch < nrpe-install-systemd.patch
-RUN install; exit 1
+RUN cat install
 
 WORKDIR /tmp/nagiosxi
 
